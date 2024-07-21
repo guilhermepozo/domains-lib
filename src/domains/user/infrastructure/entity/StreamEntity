@@ -1,0 +1,31 @@
+import { Entity, ObjectIdColumn, Column } from 'typeorm';
+import { GameEntity } from './GameEntity.ts';
+import { PlatformEntity } from './PlatformEntity';
+import { ObjectId } from 'mongodb';
+
+@Entity()
+export class StreamEntity {
+  @ObjectIdColumn()
+  id: ObjectId;
+
+  @Column()
+  title: string;
+
+  @Column(type => GameEntity)
+  game?: GameEntity;
+
+  @Column()
+  startTime: Date;
+
+  @Column()
+  endTime: Date | null;
+
+  @Column()
+  viewersCount: number;
+
+  @Column(type => PlatformEntity)
+  platform: PlatformEntity;
+
+  @Column()
+  createdAt: Date;
+}

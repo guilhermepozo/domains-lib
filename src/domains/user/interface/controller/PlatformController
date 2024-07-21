@@ -1,0 +1,35 @@
+import { PlatformService } from "../../../lib/application/services/PlatformService";
+import { PlatformRepository } from "../../../lib/infrastructure/repository/PlatformRepository";
+import { NextApiRequest, NextApiResponse } from "next";
+
+
+const platformRepository = new PlatformRepository();
+const platformService = new PlatformService(platformRepository);
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'POST') {
+    const { name, url, platformProps } = req.body;
+
+    try {
+      const platform = await platformService.createPlatform(name, url, platformProps);
+      res.status(201).json(platform);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  } else if (req.method === 'GET') {
+    const { name } = req.query;
+
+    try {
+      const platform = await platformService.getPlatformByName(name as string);
+      if (platform) {
+        res.status(200).json(platform);
+      } else {
+        res.status(404).json({ error: 'Platform not found' });
+      }
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  } else {
+    res.status(405).end(); // Method Not Allowed
+  }
+}

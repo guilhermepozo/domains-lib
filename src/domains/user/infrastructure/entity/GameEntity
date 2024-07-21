@@ -1,0 +1,21 @@
+import { Entity, ObjectIdColumn, Column } from 'typeorm';
+import { PlatformEntity } from './PlatformEntity';
+import { ObjectId } from 'mongodb';
+
+@Entity()
+export class GameEntity {
+  @ObjectIdColumn()
+  id: ObjectId;
+
+  @Column()
+  name: string;
+
+  @Column()
+  genre: string;
+
+  @Column()
+  releaseDate: Date;
+
+  @Column(type => PlatformEntity)
+  platform: PlatformEntity;
+}
